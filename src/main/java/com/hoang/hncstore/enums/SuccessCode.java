@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 public enum SuccessCode {
     SUCCESS("Success", HttpStatus.OK),
     ADD_USER("Add user success", HttpStatus.CREATED),
+    GET_ALL_USERS("Get all users success", HttpStatus.OK),
     ;
     private final String message;
 

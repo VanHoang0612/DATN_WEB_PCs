@@ -5,9 +5,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.util.HashSet;
-import java.util.Set;
-
 @Entity
 @Table(name = "roles")
 @Data
@@ -27,6 +24,4 @@ public class Role {
 
     String description;
 
-    @ManyToMany(mappedBy = "roles")
-    Set<User> users = new HashSet<>();
 }

@@ -13,6 +13,7 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -64,5 +65,20 @@ public class UserService {
         }
         return userMapper.toUserResponse(userRepository.save(user));
 
+    }
+
+    public List<UserResponse> getAllUsers() {
+        List<User> users = userRepository.findAll();
+        System.out.println(users);
+        return users.stream()
+                .map(userMapper::toUserResponse)
+                .toList();
+    }
+
+    public UserResponse getUserByUsername(String username) {
+
+        return userRepository.findByUsername(username)
+                .map(userMapper::toUserResponse)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
     }
 }

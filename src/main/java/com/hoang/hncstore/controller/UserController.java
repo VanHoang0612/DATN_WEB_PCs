@@ -9,10 +9,9 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,6 +26,22 @@ public class UserController {
         return ResponseEntity.status(SuccessCode.ADD_USER.getHttpStatus())
                 .body(
                         ApiResponse.success(userService.addUser(createUserRequest), SuccessCode.ADD_USER)
+                );
+    }
+
+    @GetMapping
+    public ResponseEntity<ApiResponse<List<UserResponse>>> getAllUsers() {
+        return ResponseEntity.status(SuccessCode.GET_ALL_USERS.getHttpStatus())
+                .body(
+                        ApiResponse.success(userService.getAllUsers(), SuccessCode.ADD_USER)
+                );
+    }
+
+    @GetMapping("/{username}")
+    public ResponseEntity<ApiResponse<UserResponse>> getUserByUsername(@PathVariable String username) {
+        return ResponseEntity.status(SuccessCode.GET_ALL_USERS.getHttpStatus())
+                .body(
+                        ApiResponse.success(userService.getUserByUsername(username), SuccessCode.ADD_USER)
                 );
     }
 }

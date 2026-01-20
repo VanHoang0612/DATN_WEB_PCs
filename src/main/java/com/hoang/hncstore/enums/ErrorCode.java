@@ -15,6 +15,7 @@ public enum ErrorCode {
     USERNAME_EXISTS("The username already exists!", HttpStatus.CONFLICT),
     EMAIL_EXISTS("The email already exists!", HttpStatus.CONFLICT),
     PHONE_NUMBER_EXISTS("The email already exists!", HttpStatus.CONFLICT),
+    USER_NOT_FOUND("The user does not exist!", HttpStatus.NOT_FOUND),
     ;
 
     private final String message;
