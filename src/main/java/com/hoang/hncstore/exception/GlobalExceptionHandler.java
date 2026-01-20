@@ -8,10 +8,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.*;
 
 @Slf4j
+@RestControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(value = {AppException.class})
     ResponseEntity<ApiResponse<Void>> handleAppException(AppException e) {

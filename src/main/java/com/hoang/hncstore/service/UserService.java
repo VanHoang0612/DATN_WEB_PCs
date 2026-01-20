@@ -1,0 +1,68 @@
+package com.hoang.hncstore.service;
+
+import com.hoang.hncstore.dto.user.CreateUserRequest;
+import com.hoang.hncstore.dto.user.UserResponse;
+import com.hoang.hncstore.entity.User;
+import com.hoang.hncstore.enums.ErrorCode;
+import com.hoang.hncstore.exception.AppException;
+import com.hoang.hncstore.mapper.UserMapper;
+import com.hoang.hncstore.repository.UserRepository;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import java.util.Optional;
+
+@Service
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+public class UserService {
+
+
+    RoleService roleService;
+    UserMapper userMapper;
+    UserRepository userRepository;
+    PasswordEncoder passwordEncoder;
+
+    public UserResponse addUser(CreateUserRequest request) {
+
+        Optional<User> existingUser = userRepository.findByUsernameOrEmailOrPhoneNumber(request.getUsername(), request.getEmail(), request.getPhoneNumber());
+        if (existingUser.isPresent()) {
+            User user = existingUser.get();
+            if (user.getUsername()
+                    .equals(request.getUsername())) {
+                throw new AppException(ErrorCode.USERNAME_EXISTS);
+            }
+            if (user.getEmail()
+                    .equals(request.getEmail())) {
+                throw new AppException(ErrorCode.EMAIL_EXISTS);
+            }
+            if (user.getPhoneNumber()
+                    .equals(request.getPhoneNumber())) {
+                throw new AppException(ErrorCode.PHONE_NUMBER_EXISTS);
+            }
+        }
+        User user = User.builder()
+                .username(request.getUsername())
+                .email(request.getEmail())
+                .phoneNumber(request.getPhoneNumber())
+                .password(request.getPassword())
+                .firstName(request.getFirstName())
+                .lastName(request.getLastName())
+                .status(request.getStatus())
+                .roles(roleService.getRolesByNameIn(request.getRoles()))
+                .build();
+        return saveUser(user);
+    }
+
+    public UserResponse saveUser(User user) {
+        if (!user.getPassword()
+                .matches("^\\$2[aby]\\$.*")) {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
+        return userMapper.toUserResponse(userRepository.save(user));
+
+    }
+}

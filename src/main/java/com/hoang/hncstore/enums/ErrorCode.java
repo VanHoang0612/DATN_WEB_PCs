@@ -11,6 +11,10 @@ public enum ErrorCode {
 
     INTERNAL_SERVER("Internal server error!", HttpStatus.INTERNAL_SERVER_ERROR),
     VALIDATION_FAILED("Validation failed!", HttpStatus.UNPROCESSABLE_ENTITY),
+    ROLE_NOT_FOUND("Role not found!", HttpStatus.NOT_FOUND),
+    USERNAME_EXISTS("The username already exists!", HttpStatus.CONFLICT),
+    EMAIL_EXISTS("The email already exists!", HttpStatus.CONFLICT),
+    PHONE_NUMBER_EXISTS("The email already exists!", HttpStatus.CONFLICT),
     ;
 
     private final String message;

@@ -35,9 +35,9 @@ public class User {
 
     String password;
 
-    String firstname;
+    String firstName;
 
-    String lastname;
+    String lastName;
 
     String avatarUrl;
 

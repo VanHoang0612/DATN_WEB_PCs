@@ -1,8 +1,11 @@
 spring:
   application:
-    name: Mochi
+    name: HNC_Store
   profiles:
     active: dev
+  jackson:
+    mapper:
+      sort-properties-alphabetically: false
 server:
   port: 8080
   servlet:
