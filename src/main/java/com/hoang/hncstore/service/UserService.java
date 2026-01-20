@@ -1,6 +1,7 @@
 package com.hoang.hncstore.service;
 
 import com.hoang.hncstore.dto.user.CreateUserRequest;
+import com.hoang.hncstore.dto.user.UpdateUserRequest;
 import com.hoang.hncstore.dto.user.UserResponse;
 import com.hoang.hncstore.entity.User;
 import com.hoang.hncstore.enums.ErrorCode;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -53,7 +55,7 @@ public class UserService {
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
                 .status(request.getStatus())
-                .roles(roleService.getRolesByNameIn(request.getRoles()))
+                .roles(roleService.getRolesStrictly(request.getRoles()))
                 .build();
         return saveUser(user);
     }
@@ -80,5 +82,19 @@ public class UserService {
         return userRepository.findByUsername(username)
                 .map(userMapper::toUserResponse)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+    }
+
+    public UserResponse updateUser(UpdateUserRequest request, String id) {
+        User user = userRepository.findById(UUID.fromString(id))
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+
+        userMapper.updateUserFromRequest(request, user);
+        if (request.getRoles() != null && !request.getRoles()
+                .isEmpty()) {
+            user.setRoles(
+                    roleService.getRolesStrictly(request.getRoles())
+            );
+        }
+        return userMapper.toUserResponse(userRepository.save(user));
     }
 }

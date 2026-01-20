@@ -2,6 +2,7 @@ package com.hoang.hncstore.controller;
 
 import com.hoang.hncstore.dto.ApiResponse;
 import com.hoang.hncstore.dto.user.CreateUserRequest;
+import com.hoang.hncstore.dto.user.UpdateUserRequest;
 import com.hoang.hncstore.dto.user.UserResponse;
 import com.hoang.hncstore.enums.SuccessCode;
 import com.hoang.hncstore.service.UserService;
@@ -42,6 +43,14 @@ public class UserController {
         return ResponseEntity.status(SuccessCode.GET_ALL_USERS.getHttpStatus())
                 .body(
                         ApiResponse.success(userService.getUserByUsername(username), SuccessCode.ADD_USER)
+                );
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<ApiResponse<UserResponse>> updateUser(@RequestBody UpdateUserRequest updateUserRequest, @PathVariable String id) {
+        return ResponseEntity.status(SuccessCode.UPDATE_USER.getHttpStatus())
+                .body(
+                        ApiResponse.success(userService.updateUser(updateUserRequest, id), SuccessCode.UPDATE_USER)
                 );
     }
 }

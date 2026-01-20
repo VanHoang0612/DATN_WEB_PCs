@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -21,5 +22,12 @@ public class RoleService {
             throw new AppException(ErrorCode.ROLE_NOT_FOUND);
         }
         return roles;
+    }
+
+    public Set<Role> getRolesStrictly(Set<RoleType> roleNames) {
+        return roleNames.stream()
+                .map(roleName -> roleRepository.findByRoleName(roleName)
+                        .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_FOUND)))
+                .collect(Collectors.toSet());
     }
 }
