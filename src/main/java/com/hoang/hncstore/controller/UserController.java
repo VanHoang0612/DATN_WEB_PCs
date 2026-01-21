@@ -6,6 +6,7 @@ import com.hoang.hncstore.dto.user.UpdateUserRequest;
 import com.hoang.hncstore.dto.user.UserResponse;
 import com.hoang.hncstore.enums.SuccessCode;
 import com.hoang.hncstore.service.UserService;
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -23,7 +24,7 @@ public class UserController {
     UserService userService;
 
     @PostMapping
-    public ResponseEntity<ApiResponse<UserResponse>> addUser(@RequestBody CreateUserRequest createUserRequest) {
+    public ResponseEntity<ApiResponse<UserResponse>> addUser(@Valid @RequestBody CreateUserRequest createUserRequest) {
         return ResponseEntity.status(SuccessCode.ADD_USER.getHttpStatus())
                 .body(
                         ApiResponse.success(userService.addUser(createUserRequest), SuccessCode.ADD_USER)
@@ -47,10 +48,12 @@ public class UserController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<ApiResponse<UserResponse>> updateUser(@RequestBody UpdateUserRequest updateUserRequest, @PathVariable String id) {
+    public ResponseEntity<ApiResponse<UserResponse>> updateUser(@Valid @RequestBody UpdateUserRequest updateUserRequest, @PathVariable String id) {
         return ResponseEntity.status(SuccessCode.UPDATE_USER.getHttpStatus())
                 .body(
                         ApiResponse.success(userService.updateUser(updateUserRequest, id), SuccessCode.UPDATE_USER)
                 );
     }
+
+
 }

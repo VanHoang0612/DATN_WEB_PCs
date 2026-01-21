@@ -29,7 +29,7 @@ public class CreateUserRequest {
     String phoneNumber;
 
     @Pattern(regexp = RegexConstants.PASSWORD_REGEX, message = "{PASSWORD_REGEX}")
-    @Size(min = 6, max = 30, message = "{PASSWORD_SIZE}")
+    @Size(min = 8, max = 30, message = "{PASSWORD_SIZE}")
     String password;
 
     String firstName;

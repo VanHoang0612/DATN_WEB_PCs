@@ -30,4 +30,9 @@ public class RoleService {
                         .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_FOUND)))
                 .collect(Collectors.toSet());
     }
+
+    public Role findByRoleName(RoleType roleType) {
+        return roleRepository.findByRoleName(roleType)
+                .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_FOUND));
+    }
 }

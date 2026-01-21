@@ -11,6 +11,7 @@ public enum SuccessCode {
     ADD_USER("Add user success", HttpStatus.CREATED),
     GET_ALL_USERS("Get all users success", HttpStatus.OK),
     UPDATE_USER("Update user success", HttpStatus.OK),
+    REGISTER("Register success", HttpStatus.CREATED),
     ;
     private final String message;
 

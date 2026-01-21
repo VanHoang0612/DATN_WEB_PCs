@@ -61,10 +61,7 @@ public class UserService {
     }
 
     public UserResponse saveUser(User user) {
-        if (!user.getPassword()
-                .matches("^\\$2[aby]\\$.*")) {
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-        }
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userMapper.toUserResponse(userRepository.save(user));
 
     }
@@ -96,5 +93,13 @@ public class UserService {
             );
         }
         return userMapper.toUserResponse(userRepository.save(user));
+    }
+
+    public boolean existsByPhoneNumber(String phoneNumber) {
+        return userRepository.existsByPhoneNumber(phoneNumber);
+    }
+
+    public boolean existsByUsername(String username) {
+        return userRepository.existsByUsername(username);
     }
 }

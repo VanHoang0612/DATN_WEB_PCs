@@ -33,6 +33,7 @@ public class User {
     @Column(unique = true, nullable = false, length = 10)
     String phoneNumber;
 
+    @Column(nullable = false)
     String password;
 
     String firstName;
@@ -43,6 +44,9 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     UserStatus status;
+
+    @Builder.Default
+    Boolean enabled = false;
 
     @CreationTimestamp
     @Column(updatable = false, nullable = false)
