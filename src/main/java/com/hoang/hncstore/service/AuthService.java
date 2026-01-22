@@ -1,12 +1,17 @@
 package com.hoang.hncstore.service;
 
+import com.hoang.hncstore.dto.OtpSession;
 import com.hoang.hncstore.dto.auth.RegisterCustomerRequest;
+import com.hoang.hncstore.dto.auth.SendOtpResponse;
+import com.hoang.hncstore.dto.auth.SendSmsOtpRequest;
 import com.hoang.hncstore.entity.User;
 import com.hoang.hncstore.enums.ErrorCode;
+import com.hoang.hncstore.enums.OtpPurpose;
 import com.hoang.hncstore.enums.RoleType;
 import com.hoang.hncstore.enums.UserStatus;
 import com.hoang.hncstore.exception.AppException;
 import com.hoang.hncstore.utils.PasswordUtils;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +24,8 @@ public class AuthService {
 
     private final UserService userService;
     private final RoleService roleService;
+    private final SessionOtpService sessionOtpService;
+    private final SmsService smsService;
 
     public void register(RegisterCustomerRequest request) {
         if (userService.existsByPhoneNumber(request.getPhoneNumber())) {
@@ -41,7 +48,15 @@ public class AuthService {
                         Set.of(roleService.findByRoleName(RoleType.USER))
                 )
                 .build();
-        
+
         userService.saveUser(user);
+    }
+
+
+    public SendOtpResponse sendSmsOtp(@Valid SendSmsOtpRequest request) {
+        OtpSession res = sessionOtpService.createSession(request.getPhoneNumber(), OtpPurpose.REGISTER);
+        String body = "Your OTP code is: " + res.getOtp() + ". Valid for " + res.getTtlInMinutes() + " minutes.";
+        smsService.sendSms(request.getPhoneNumber(), body);
+        return new SendOtpResponse(res.getSessionId());
     }
 }

@@ -11,15 +11,14 @@ import java.time.Duration;
 public class RedisService {
 
     private final StringRedisTemplate redisTemplate;
-    private final Duration ttl = Duration.ofMinutes(5);
 
-    public void saveValue(String key, String value) {
+    public void saveValue(String key, String value, Duration ttl) {
         redisTemplate.opsForValue()
                 .set(key, value, ttl);
     }
 
-    public void getValue(String key) {
-        redisTemplate.opsForValue()
+    public String getValue(String key) {
+        return redisTemplate.opsForValue()
                 .get(key);
     }
 

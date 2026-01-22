@@ -2,6 +2,8 @@ package com.hoang.hncstore.controller;
 
 import com.hoang.hncstore.dto.ApiResponse;
 import com.hoang.hncstore.dto.auth.RegisterCustomerRequest;
+import com.hoang.hncstore.dto.auth.SendOtpResponse;
+import com.hoang.hncstore.dto.auth.SendSmsOtpRequest;
 import com.hoang.hncstore.enums.SuccessCode;
 import com.hoang.hncstore.service.AuthService;
 import jakarta.validation.Valid;
@@ -25,5 +27,13 @@ public class AuthController {
                 .body(
                         ApiResponse.success(null, SuccessCode.REGISTER)
                 );
+    }
+
+    @PostMapping("/send-otp/sms")
+    public ResponseEntity<ApiResponse<SendOtpResponse>> sendOtp(@Valid @RequestBody SendSmsOtpRequest sendSmsOtpRequest) {
+        SendOtpResponse res = authService.sendSmsOtp(sendSmsOtpRequest);
+        return ResponseEntity.ok(
+                ApiResponse.success(res, SuccessCode.VERIFY_PHONE_NUMBER)
+        );
     }
 }

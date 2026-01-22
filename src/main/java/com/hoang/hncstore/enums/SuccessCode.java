@@ -12,6 +12,7 @@ public enum SuccessCode {
     GET_ALL_USERS("Get all users success", HttpStatus.OK),
     UPDATE_USER("Update user success", HttpStatus.OK),
     REGISTER("Register success", HttpStatus.CREATED),
+    VERIFY_PHONE_NUMBER("The verification code has been sent to your phone number", HttpStatus.OK),
     ;
     private final String message;
 
