@@ -26,6 +26,7 @@ public class AuthService {
     private final RoleService roleService;
     private final SessionOtpService sessionOtpService;
     private final SmsService smsService;
+    private final VonageSmsService vonageSmsService;
 
     public void register(RegisterCustomerRequest request) {
         if (userService.existsByPhoneNumber(request.getPhoneNumber())) {
@@ -56,7 +57,7 @@ public class AuthService {
     public SendOtpResponse sendSmsOtp(@Valid SendSmsOtpRequest request) {
         OtpSession res = sessionOtpService.createSession(request.getPhoneNumber(), OtpPurpose.REGISTER);
         String body = "Your OTP code is: " + res.getOtp() + ". Valid for " + res.getTtlInMinutes() + " minutes.";
-        smsService.sendSms(request.getPhoneNumber(), body);
+        vonageSmsService.sendSms(request.getPhoneNumber(), body);
         return new SendOtpResponse(res.getSessionId());
     }
 }
